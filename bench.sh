@@ -93,9 +93,9 @@ popd > /dev/null
 leandir="$localdevdir/lean"
 leanmldir="$leandir/../mathlib"
 redis_dir="$localdevdir/redis-6.0.9/src"
-pdfdoc="$localdevdir/325462-sdm-vol-1-2abcd-3abcd.pdf"
+pdfdoc="$localdevdir/325383-sdm-vol-2abcd.pdf"
 
-lib_mi="$localdevdir/mimalloc/out/release/libmimalloc$extso"
+lib_mi="/builddir/build/BUILD/mimalloc/clr-build/libmimalloc$extso"
 lib_dmi="$localdevdir/mimalloc/out/debug/libmimalloc-debug$extso"
 lib_smi="$localdevdir/mimalloc/out/secure/libmimalloc-secure$extso"
 lib_xmi="$localdevdir/../../mimalloc/out/release/libmimalloc$extso"
@@ -108,15 +108,15 @@ lib_sn="$localdevdir/snmalloc/release/libsnmallocshim$extso"
 lib_sm="$localdevdir/SuperMalloc/release/lib/libsupermalloc$extso"
 #lib_sm="$localdevdir/SuperMalloc/release/lib/libsupermalloc_pthread$extso"
 lib_je="${localdevdir}/jemalloc/lib/libjemalloc$extso"
-lib_rp="`find ${localdevdir}/rpmalloc/bin/*/release -name librpmallocwrap$extso`"
+# lib_rp="`find ${localdevdir}/rpmalloc/bin/*/release -name librpmallocwrap$extso`"
 #lib_rp="/usr/lib/x86_64-linux-gnu/librpmallocwrap$extso"
 lib_mesh="${localdevdir}/mesh/libmesh$extso"
 lib_nomesh="${localdevdir}/nomesh/libmesh$extso"
 lib_tlsf="${localdevdir}/tlsf/out/release/libtlsf$extso"
 lib_tc="$localdevdir/gperftools/.libs/libtcmalloc_minimal$extso"
 lib_sc="$localdevdir/scalloc/out/Release/lib.target/libscalloc$extso"
-lib_tbb="`find $localdevdir/tbb/build -name libtbbmalloc_proxy$extso.2`"
-lib_tbb_dir="$(dirname $lib_tbb)"
+# lib_tbb="`find $localdevdir/tbb/build -name libtbbmalloc_proxy$extso.2`"
+# lib_tbb_dir="$(dirname $lib_tbb)"
 
 if test "$use_packages" = "1"; then
   lib_tc="/usr/lib/libtcmalloc$extso"
@@ -168,21 +168,21 @@ while : ; do
         run_barnes=1
         run_lean=1
         run_xmalloc_test=1
-        run_larson=1        
+        run_larson=1
         run_cscratch=1
-	      run_mstress=1
-        if [ -z "$darwin" ]; then
-          run_rptest=1
-          run_alloc_test=1
-          run_sh6bench=1
-          run_sh8bench=1
-          run_redis=1        
-        fi
-        # run_lean_mathlib=1
-        # run_gs=1
-        # run_rbstress=1
-        # run_cthrash=1
-        # run_malloc_test=1
+        run_mstress=1
+#         if [ -z "$darwin" ]; then
+        run_rptest=1
+        run_alloc_test=1
+        run_sh6bench=1
+        run_sh8bench=1
+        run_redis=1
+#         fi
+#         run_lean_mathlib=1
+        run_gs=1
+        run_rbstress=1
+        run_cthrash=1
+#         run_malloc_test=1
         ;;
     je)
         run_je=1;;
@@ -575,7 +575,7 @@ if test "$run_barnes" = "1"; then
   run_test "barnes" "./barnes"
 fi
 if test "$run_gs" = "1"; then
-  run_test "gs" "gs -dBATCH -dNODISPLAY $pdfdoc"
+  run_test "gs" "gs -dBATCH -dNODISPLAY $pdfdoc";
 fi
 if test "$run_lean" = "1"; then
   pushd "$leandir/library"
@@ -612,10 +612,10 @@ if test "$run_ebizzy" = "1"; then
   run_test "ebizzy" "./ebizzy -t $procs -M -S 2 -s 128"
 fi
 if test "$run_sh6bench" = "1"; then
-  run_test "sh6benchN" "./sh6bench $procsx2"
+  run_test "sh6benchN" "./sh6bench $procsx2";
 fi
 if test "$run_sh8bench" = "1"; then
-  run_test "sh8benchN" "./sh8bench $procsx2"
+  run_test "sh8benchN" "./sh8bench $procsx2";
 fi
 if test "$run_xmalloc_test" = "1"; then
   #tds=`echo "$procs/2" | bc`

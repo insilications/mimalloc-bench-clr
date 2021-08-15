@@ -355,35 +355,35 @@ if test "$setup_sc" = "1"; then
 fi
 
 if test "$setup_mi" = "1"; then
-  checkout mi $version_mi mimalloc https://github.com/microsoft/mimalloc
+#   checkout mi $version_mi mimalloc https://github.com/microsoft/mimalloc
 
   echo ""
   echo "- build mimalloc release"
 
-  mkdir -p out/release
-  cd out/release
-  cmake ../..
-  make -j 4
-  cd ../..
-
-  echo ""
-  echo "- build mimalloc debug with full checking"
-
-  mkdir -p out/debug
-  cd out/debug
-  cmake ../.. -DMI_CHECK_FULL=ON
-  make -j 4
-  cd ../..
-
-  echo ""
-  echo "- build mimalloc secure"
-
-  mkdir -p out/secure
-  cd out/secure
-  cmake ../..
-  make -j 4
-  cd ../..
-  popd
+#   mkdir -p out/release
+#   cd out/release
+#   cmake ../..
+#   make -j 4
+#   cd ../..
+#
+#   echo ""
+#   echo "- build mimalloc debug with full checking"
+#
+#   mkdir -p out/debug
+#   cd out/debug
+#   cmake ../.. -DMI_CHECK_FULL=ON
+#   make -j 4
+#   cd ../..
+#
+#   echo ""
+#   echo "- build mimalloc secure"
+#
+#   mkdir -p out/secure
+#   cd out/secure
+#   cmake ../..
+#   make -j 4
+#   cd ../..
+#   popd
 fi
 
 
@@ -403,7 +403,7 @@ if test "$setup_lean" = "1"; then
   mkdir -p out/release
   cd out/release
   env CC=gcc CXX="g++ -Wno-exceptions" cmake ../../src -DCUSTOM_ALLOCATORS=OFF
-  make -j $procs
+  make -j16
   popd
 fi
 
@@ -419,7 +419,7 @@ if test "$setup_redis" = "1"; then
   fi
 
   cd "redis-$version_redis/src"
-  make USE_JEMALLOC=no MALLOC=libc
+  make USE_JEMALLOC=no MALLOC=libc -j16
   popd
 fi
 
@@ -430,7 +430,7 @@ if test "$setup_ch" = "1"; then
   if test -d "ClickHouse"; then
     echo "$devdir/ClickHouse already exists; no need to git clone"
   else
-    sudo apt-get install git pbuilder debhelper lsb-release fakeroot sudo debian-archive-keyring debian-keyring
+    #sudo apt-get install git pbuilder debhelper lsb-release fakeroot sudo debian-archive-keyring debian-keyring
     git clone --recursive https://github.com/yandex/ClickHouse.git
   fi
   cd ClickHouse
@@ -466,12 +466,12 @@ fi
 if test "$setup_bench" = "1"; then
   phase "get Intel PDF manual"
 
-  pdfdoc="325462-sdm-vol-1-2abcd-3abcd.pdf"
+  pdfdoc="325383-sdm-vol-2abcd.pdf"
   pushd "$devdir"
   if test -f "$pdfdoc"; then
     echo "do nothing: $devdir/$pdfdoc already exists"
   else
-    wget https://software.intel.com/sites/default/files/managed/39/c5/325462-sdm-vol-1-2abcd-3abcd.pdf
+    wget https://software.intel.com/content/dam/develop/external/us/en/documents-tps/325383-sdm-vol-2abcd.pdf
   fi
   popd
 fi
@@ -481,8 +481,8 @@ if test "$setup_bench" = "1"; then
 
   mkdir -p out/bench
   cd out/bench
-  cmake ../../bench
-  make
+  cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ../../bench
+  make -j16 V=1 VERBOSE=1
   cd ../..
 fi
 
@@ -491,9 +491,9 @@ curdir=`pwd`
 
 phase "installed allocators"
 echo "" > $devdir/versions.txt
-for f in $devdir/version_*.txt; do
- cat $f >> $devdir/versions.txt
-done
+# for f in $devdir/version_*.txt; do
+#  cat $f >> $devdir/versions.txt
+# done
 cat $devdir/versions.txt | column -t
 
 phase "done in $curdir"
